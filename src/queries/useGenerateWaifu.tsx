@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { GenerateWaifuValues } from "../types";
-import TriggerNotification from "../utils/TriggerNotification";
+import { showNotification } from "@mantine/notifications";
 
 async function generateWaifu({
   prevBlob,
@@ -8,6 +8,9 @@ async function generateWaifu({
   random,
 }: GenerateWaifuValues) {
   try {
+    if (prevBlob) {
+      URL.revokeObjectURL(prevBlob);
+    }
     const body = random
       ? JSON.stringify({})
       : JSON.stringify({
@@ -27,25 +30,12 @@ async function generateWaifu({
     if (res.status === 200) {
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
-      if (prevBlob) {
-        URL.revokeObjectURL(prevBlob);
-      }
       return url;
     } else if (res.status === 429) {
-      TriggerNotification({
-        message: "Rate limit reached. Try again later.",
-        color: "red",
-        loading: false,
-      });
-      return prevBlob;
+      throw new Error("Rate limit reached. Try again later");
     }
   } catch (error: any) {
-    TriggerNotification({
-      message: error.toString(),
-      color: "red",
-      loading: false,
-    });
-    return prevBlob;
+    throw new Error(error);
   }
 }
 
@@ -55,21 +45,21 @@ export default function useGenerateWaifu() {
       generateWaifu({ prevBlob, values, random }),
     {
       onSuccess: () => {
-        TriggerNotification({
+        showNotification({
           message: "Waifu generated",
           color: "green",
           loading: false,
         });
       },
       onError: (error: any) => {
-        TriggerNotification({
+        showNotification({
           message: error.toString(),
           color: "red",
           loading: false,
         });
       },
       onMutate: () => {
-        TriggerNotification({
+        showNotification({
           message: "Creating Waifu",
           color: "yellow",
           loading: false,

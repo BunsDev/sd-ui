@@ -1,5 +1,5 @@
+import { showNotification } from "@mantine/notifications";
 import { useQuery } from "@tanstack/react-query";
-import TriggerNotification from "../utils/TriggerNotification";
 
 async function getStatus() {
   try {
@@ -20,14 +20,14 @@ export default function useGetStatus() {
   return useQuery(["status"], () => getStatus(), {
     refetchInterval: 60000,
     onSuccess: () => {
-      TriggerNotification({
+      showNotification({
         message: "Server is active",
         color: "green",
         loading: false,
       });
     },
     onError: () => {
-      TriggerNotification({
+      showNotification({
         message: "Server is down",
         color: "red",
         loading: false,
