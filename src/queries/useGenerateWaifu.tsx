@@ -60,7 +60,7 @@ export default function useGenerateWaifu() {
       },
       onMutate: () => {
         showNotification({
-          message: "Creating Waifu",
+          message: "Generating waifu",
           color: "yellow",
           loading: false,
         });
