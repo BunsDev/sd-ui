@@ -53,7 +53,6 @@ export default function App() {
           <div style={{ width: 512, height: 512, position: "relative" }}>
             <LoadingOverlay visible={generating} overlayBlur={2} />
             <Image
-              radius="md"
               height={512}
               width={512}
               withPlaceholder={!waifuData}
