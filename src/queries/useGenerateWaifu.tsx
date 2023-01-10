@@ -18,7 +18,7 @@ async function generateWaifu({
           negative_prompt: values?.negative || "",
         });
     const res = await fetch(
-      `https://waifus-api.nemusona.com/api/generate?token=${process.env.TOKEN}`,
+      `https://waifus-api.nemusona.com/api/generate`,
       {
         method: "POST",
         headers: {
@@ -30,7 +30,7 @@ async function generateWaifu({
     if (res.status === 200) {
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
-      return url;
+      return { url, positive: values?.positive, negative: values?.negative };
     } else if (res.status === 429) {
       throw new Error("Rate limit reached. Try again later");
     }

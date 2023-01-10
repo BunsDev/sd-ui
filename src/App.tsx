@@ -33,11 +33,11 @@ export default function App() {
   });
 
   const onSubmit = (values: FormValues) => {
-    generate({ prevBlob: waifuData, values: values, random: false });
+    generate({ prevBlob: waifuData?.url, values: values, random: false });
   };
 
   const onRandom = () => {
-    generate({ prevBlob: waifuData, values: null, random: true });
+    generate({ prevBlob: waifuData?.url, values: null, random: true });
   };
 
   const onDownload = (data: string | undefined) => {
@@ -67,21 +67,21 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <Box sx={{ maxWidth: 600 }} mx="auto" my="lg">
+      <Box sx={{ width: 600 }} mx="auto" my="lg">
         <Center pb={10}>
-          <Image src={Cute} width={64} height={64} />
-          <Text fz="xl" fw={700}>
+          <Image src={Cute} width={48} height={48}/>
+          <Text size="xl" fw={700}>
             Nemu's Waifu Generator
           </Text>
         </Center>
-        <Center sx={{ maxWidth: 600, maxHeight: 600 }} pb={5}>
+        <Center pb={5}>
           <div style={{ width: 512, height: 512, position: "relative" }}>
             <LoadingOverlay visible={generating} overlayBlur={2} />
             <Image
               height={512}
               width={512}
               withPlaceholder={!waifuData}
-              src={waifuData}
+              src={waifuData?.url}
               placeholder={
                 <Text fz="xl" fw={500}>
                   Image
@@ -90,17 +90,25 @@ export default function App() {
             />
           </div>
         </Center>
-        <Box>
-          <Button
-            left={450}
-            radius="md"
-            size="sm"
-            onClick={() => onDownload(waifuData)}
-            disabled={generating || !waifuData}
-          >
-            Download
-          </Button>
-        </Box>
+        <Button
+          left={470}
+          radius="md"
+          size="xs"
+          onClick={() => onDownload(waifuData?.url)}
+          disabled={generating || !waifuData}
+        >
+          Download
+        </Button>
+        <Center>
+          <Box sx={{ width: 512 }}>
+            {waifuData?.positive && (
+              <Text size="sm">{`Positive: ${waifuData.positive}`}</Text>
+            )}
+            {waifuData?.negative && (
+              <Text size="sm">{`Negative: ${waifuData.negative}`}</Text>
+            )}
+          </Box>
+        </Center>
         <form
           onSubmit={form.onSubmit((values: FormValues) => onSubmit(values))}
         >

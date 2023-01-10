@@ -18,13 +18,13 @@ async function getStatus() {
 
 export default function useGetStatus() {
   return useQuery(["status"], () => getStatus(), {
-    refetchInterval: 60000,
+    refetchInterval: 10000,
     onSuccess: () => {
-      showNotification({
-        message: "Server is active",
-        color: "green",
-        loading: false,
-      });
+      // showNotification({
+      //   message: "Server is active",
+      //   color: "green",
+      //   loading: false,
+      // });
     },
     onError: () => {
       showNotification({
